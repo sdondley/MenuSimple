@@ -1,0 +1,21 @@
+{
+  "name": "Menu-Simple",
+  "description": "Creates, displays, and executes a simple option menu on the command line",
+  "version": "0.1",
+  "perl": "6.*",
+  "authors": [
+    "Steve Dondley"
+  ],
+  "auth": "zef:sdondley",
+  "depends": [],
+  "build-depends": [],
+  "test-depends": [
+    "Test::Output"
+  ],
+  "provides": {
+    "Menu::Simple": "lib/Menu/Simple.rakumod"
+  },
+  "resources": [],
+  "license": "Artistic-2.0",
+  "source-url": "Write me!"
+}
