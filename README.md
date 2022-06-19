@@ -57,28 +57,29 @@ Assuming Raku and zef is already installed, install the module with:
 `zef install Menu::Simple`
 
 DESCRIPTION
------------
+===========
 
 The `Menu::Simple` module outputs a list of numbered menu options to a terminal. Users are prompted to enter the option on the command line.
 
 After a user selects an option, a submenu can be shown or an action can be executed, or both a submenu and an action can be executed. If neither a submenu or action is executed, an option's object is returned back can control is given back to to code calling the menu.
 
-CLASSES
--------
+CLASSES AND METHODS
+===================
 
-### Menu
+Menu Class
+----------
 
-#### Higher level methods
+### Higher level methods
 
 The following higher level methods are the most useful methods for generating and executing menus.
 
-##### new()
+#### new()
 
     my $menu = Menu.new();
 
 Creates a new menu object. Returns the menu object created.
 
-##### add-options(List:D $options where { $options.all ~~ Str })
+#### add-options(List:D $options where { $options.all ~~ Str })
 
     my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
 
@@ -86,7 +87,7 @@ Accepts a List of strings which are added to a menu group. Returns the menu the 
 
 *Use this method to quickly add several menu options to a menu at once.*
 
-##### multi add-option(Str:D :$display-string, Menu :$submenu, :&action)
+#### multi add-option(Str:D :$display-string, Menu :$submenu, :&action)
 
     my $menu = Menu.new();
     $menu.add-option(display-string => $string, submenu => $menu, action => &callable);
@@ -95,7 +96,7 @@ Adds a single option to the menu. It can accept a submenu to display and/or a su
 
 *Use this method to add an option to a menu that executes a submenu and/or calls a subroutine when selected.*
 
-##### multi add-option(Option:D $option)
+#### multi add-option(Option:D $option)
 
     my $menu = Menu.new;
     my $option = Option.new(display-string => $string, submenu => $menu, action => &callable);
@@ -105,7 +106,7 @@ Adds an existing option object to the menu.
 
 *Use this method to add an existing Option object to a menu.*
 
-##### execute()
+#### execute()
 
     my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
     $menu.execute;
@@ -116,7 +117,7 @@ This method wraps many of the lower-level methods for processing the user's inpu
 
 *This method is the usual for displaying a menu and collecting, validating, and executing responses to a user's selection after a menu is built.*
 
-##### add-submenu(Menu:D $menu)
+#### add-submenu(Menu:D $menu)
 
     my $main-menu = Menu.new().add-options: <Option A, Option B>;
     $main-menu.add-option: Option.new(display-string => 'Some string');
@@ -127,7 +128,7 @@ Adds a submenu to the most recently added option. The submenu will be executed i
 
 *Use this method to add a submenu to the last option in an existing menu.*
 
-##### add-submenu(Menu:D $menu, Int:D $option-number)
+#### add-submenu(Menu:D $menu, Int:D $option-number)
 
     my $main-menu = Menu.new.add-options: <Option A, Option B>;
     my $submmenu = Menu.new.add-options: <Option 1, Option 2, Option 3>;
@@ -137,7 +138,7 @@ Adds a submenu to an existing option as indicated by the `$option-number` within
 
 *Use this method to add a submenu that's executed when an option is selected.*
 
-##### add-action(&action)
+#### add-action(&action)
 
     sub some-action() { say 'doing some actionn' };
     my $menu = Menu.new();
@@ -148,7 +149,7 @@ Adds an action to the last option added to the menu. The action will get execute
 
 *Use this method to add an action that's executed when an option is selected.*
 
-##### add-action(&action, Int:D $option-number)
+#### add-action(&action, Int:D $option-number)
 
     my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
     $menu.add-action({ say 'running action'}, 1);   # adds the action to o 'Option 1'
@@ -161,7 +162,7 @@ Adds an action to an existing option as indicated by the `$option-number` argume
 
 The Menu class methods below are typically not called directly and are provided in case you wish to override them or have more control over how menus are executed.
 
-##### display()
+#### display()
 
     my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
     $menu.display;
@@ -170,7 +171,7 @@ Outputs a menu's option group and the prompt to the command line.
 
 *This is a lower level method and is not usually not run directly.*
 
-##### display-group()
+#### display-group()
 
     my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
     $menu.display-group;
@@ -179,7 +180,7 @@ Outputs a menu's option group to the command line.
 
 *This is a lower level method and is not usually not run directly.*
 
-##### get-option(Str:D $option-number)
+#### get-option(Str:D $option-number)
 
     my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
     my $option = $menu.get-option(3);
@@ -188,7 +189,7 @@ Returns an option object that has already been added to a menu. Accepts an integ
 
 *This is a lower level method and is not usually not run directly.*
 
-##### option-count()
+#### option-count()
 
     my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
     my $count = $menu.option-count();
@@ -197,7 +198,7 @@ Returns the number of options that have been added to a menu.
 
 *This is a lower level method and is not usually not run directly.*
 
-##### display-prompt()
+#### display-prompt()
 
     my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
     $menu.prompt;
@@ -206,7 +207,7 @@ Displays a menu's prompt on the command line.
 
 *This is a lower level method and is not usually not run directly.*
 
-##### get-selection()
+#### get-selection()
 
     my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
     $menu.get-selection;
@@ -215,7 +216,7 @@ Gets selection input from the user.
 
 *This is a lower level method and is not usually not run directly.*
 
-##### validate-selection( --> Bool )
+#### validate-selection( --> Bool )
 
     my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
     $menu.selection = 3;
@@ -225,56 +226,56 @@ Determines if the user has selected a valid option. Returns a True or False valu
 
 *This is a lower level method and is not usually not run directly.*
 
-##### process-selection()
-
-Validates the user's selection and re-prompts user if selection is not valid.
-
-*This is a lower level method and is not usually not run directly.*
+#### process-selection()
 
     my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
     $menu.selection = 2;
     $menu.process-selection;
 
-#### Attributes
+Validates the user's selection and re-prompts user if selection is not valid.
 
-##### %.options
+*This is a lower level method and is not usually not run directly.*
+
+### Attributes
+
+#### %.options
 
 A hash of the options in an options groups.
 
-##### $.menuID = ++$ID;
+#### $.menuID = ++$ID;
 
 A unique ID number for the menu
 
-##### $.option-format is rw = "%d - %s";
+#### $.option-format is rw = "%d - %s";
 
 The format string for displaying options where `%d` is the option number and `%s` is the display string.
 
-##### $.selection is rw;
+#### $.selection is rw;
 
 The string the user has input
 
-##### $.validated-selection is rw = Nil;
+#### $.validated-selection is rw = Nil;
 
 The validated string of the user's input
 
-##### $.option-separator is rw = "\n";
+#### $.option-separator is rw = "\n";
 
 The string that separates menu options
 
-##### $.prompt = "\nMake selection: ";
+#### $.prompt = "\nMake selection: ";
 
 The prompt shown to the user
 
-##### $.error-msg = "\nSorry, invalid entry. Try again. ";
+#### $.error-msg = "\nSorry, invalid entry. Try again. ";
 
 The error show when a user make an invalid selection
 
 Option Class
 ------------
 
-#### Methods
+### Methods
 
-##### Option.new(Str:D :display-string, :action, :submenu)
+#### Option.new(Str:D :display-string, :action, :submenu)
 
     my $menu = Option.new(
         display-string => Str,
@@ -290,21 +291,21 @@ The `action` is the subroutine run when the option is selected.
 
 The `submenu` is the menu displayed when the option is selected.
 
-#### Attributes
+### Attributes
 
-==head5 $.option-number;
+#### $.option-number;
 
 The number of the option
 
-##### $.display-string is required;
+#### $.display-string is required;
 
 The string shown when an option is printed
 
-##### $.submenu is rw;
+#### $.submenu is rw;
 
 The submenu executed when an option is selected
 
-##### &.action is rw;
+#### &.action is rw;
 
 The action executed when an option is selected
 
