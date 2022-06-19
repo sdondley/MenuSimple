@@ -183,7 +183,7 @@ Assuming Raku and zef is already installed, install the module with:
 
 C<zef install Menu::Simple>
 
-=head2 DESCRIPTION
+=head1 DESCRIPTION
 
 The C<Menu::Simple> module outputs  a list of numbered menu options to a terminal.
 Users are prompted to enter the option on the command line.
@@ -193,16 +193,16 @@ can be executed, or both a submenu and an action can be executed. If neither
 a submenu or action is executed, an option's object is returned back can control
 is given back to to code calling the menu.
 
-=head2 CLASSES
+=head1 CLASSES AND METHODS
 
-=head3 Menu
+=head2 Menu Class
 
-=head4 Higher level methods
+=head3 Higher level methods
 
 The following higher level methods are the most useful methods for generating and
 executing menus.
 
-=head5 new()
+=head4 new()
 
 =begin code
 
@@ -212,7 +212,7 @@ my $menu = Menu.new();
 
 Creates a new menu object. Returns the menu object created.
 
-=head5 add-options(List:D $options where { $options.all ~~ Str })
+=head4 add-options(List:D $options where { $options.all ~~ Str })
 
 =begin code
 
@@ -226,7 +226,7 @@ are added to the list.
 
 I<Use this method to quickly add several menu options to a menu at once.>
 
-=head5 multi add-option(Str:D :$display-string, Menu :$submenu, :&action)
+=head4 multi add-option(Str:D :$display-string, Menu :$submenu, :&action)
 
 =begin code
 
@@ -241,7 +241,7 @@ to execute after the option is selected by the user. Returns the menu the option
 I<Use this method to add an option to a menu that executes a submenu and/or calls a subroutine
 when selected.>
 
-=head5 multi add-option(Option:D $option)
+=head4 multi add-option(Option:D $option)
 
 =begin code
 
@@ -255,7 +255,7 @@ Adds an existing option object to the menu.
 
 I<Use this method to add an existing Option object to a menu.>
 
-=head5 execute()
+=head4 execute()
 
 =begin code
 
@@ -273,7 +273,7 @@ This method wraps many of the lower-level methods for processing the user's inpu
 I<This method is the usual for displaying a menu and collecting, validating, and
 executing responses to a user's selection after a menu is built.>
 
-=head5 add-submenu(Menu:D $menu)
+=head4 add-submenu(Menu:D $menu)
 
 =begin code
 
@@ -289,7 +289,7 @@ the option is selected by the user.
 
 I<Use this method to add a submenu to the last option in an existing menu.>
 
-=head5 add-submenu(Menu:D $menu, Int:D $option-number)
+=head4 add-submenu(Menu:D $menu, Int:D $option-number)
 
 =begin code
 
@@ -304,7 +304,7 @@ The submenu will be executed when the option is selected by the user.
 
 I<Use this method to add a submenu that's executed when an option is selected.>
 
-=head5 add-action(&action)
+=head4 add-action(&action)
 
 =begin code
 
@@ -320,7 +320,7 @@ The action will get executed if the option is selected.
 
 I<Use this method to add an action that's executed when an option is selected.>
 
-=head5 add-action(&action, Int:D $option-number)
+=head4 add-action(&action, Int:D $option-number)
 
 =begin code
 
@@ -339,7 +339,7 @@ I<Use this method to execute an action when the option is selected.>
 The Menu class methods below are typically not called directly and are provided
 in case you wish to override them or have more control over how menus are executed.
 
-=head5 display()
+=head4 display()
 
 =begin code
 
@@ -352,7 +352,7 @@ Outputs a menu's option group and the prompt to the command line.
 
 I<This is a lower level method and is not usually not run directly.>
 
-=head5 display-group()
+=head4 display-group()
 
 =begin code
 
@@ -365,7 +365,7 @@ Outputs a menu's option group to the command line.
 
 I<This is a lower level method and is not usually not run directly.>
 
-=head5 get-option(Str:D $option-number)
+=head4 get-option(Str:D $option-number)
 
 =begin code
 
@@ -379,7 +379,7 @@ the number value of ordinal position of the option in the menu.
 
 I<This is a lower level method and is not usually not run directly.>
 
-=head5 option-count()
+=head4 option-count()
 
 =begin code
 
@@ -392,7 +392,7 @@ Returns the number of options that have been added to a menu.
 
 I<This is a lower level method and is not usually not run directly.>
 
-=head5 display-prompt()
+=head4 display-prompt()
 
 =begin code
 
@@ -405,7 +405,7 @@ Displays a menu's prompt on the command line.
 
 I<This is a lower level method and is not usually not run directly.>
 
-=head5 get-selection()
+=head4 get-selection()
 
 =begin code
 
@@ -418,7 +418,7 @@ Gets selection input from the user.
 
 I<This is a lower level method and is not usually not run directly.>
 
-=head5 validate-selection( --> Bool )
+=head4 validate-selection( --> Bool )
 
 =begin code
 
@@ -432,11 +432,7 @@ Determines if the user has selected a valid option. Returns a True or False valu
 
 I<This is a lower level method and is not usually not run directly.>
 
-=head5 process-selection()
-
-Validates the user's selection and re-prompts user if selection is not valid.
-
-I<This is a lower level method and is not usually not run directly.>
+=head4 process-selection()
 
 =begin code
 
@@ -446,46 +442,50 @@ $menu.process-selection;
 
 =end code
 
-=head4 Attributes
+Validates the user's selection and re-prompts user if selection is not valid.
 
-=head5 %.options
+I<This is a lower level method and is not usually not run directly.>
+
+=head3 Attributes
+
+=head4 %.options
 
 A hash of the options in an options groups.
 
-=head5 $.menuID = ++$ID;
+=head4 $.menuID = ++$ID;
 
 A unique ID number for the menu
 
-=head5 $.option-format is rw = "%d - %s";
+=head4 $.option-format is rw = "%d - %s";
 
 The format string for displaying options where C<%d> is the option number
 and C<%s> is the display string.
 
-=head5 $.selection is rw;
+=head4 $.selection is rw;
 
 The string the user has input
 
-=head5 $.validated-selection is rw = Nil;
+=head4 $.validated-selection is rw = Nil;
 
 The validated string of the user's input
 
-=head5 $.option-separator is rw = "\n";
+=head4 $.option-separator is rw = "\n";
 
 The string that separates menu options
 
-=head5 $.prompt = "\nMake selection: ";
+=head4 $.prompt = "\nMake selection: ";
 
 The prompt shown to the user
 
-=head5 $.error-msg = "\nSorry, invalid entry. Try again. ";
+=head4 $.error-msg = "\nSorry, invalid entry. Try again. ";
 
 The error show when a user make an invalid selection
 
 =head2 Option Class
 
-=head4 Methods
+=head3 Methods
 
-=head5 Option.new(Str:D :display-string, :action, :submenu)
+=head4 Option.new(Str:D :display-string, :action, :submenu)
 
 =begin code
 
@@ -505,24 +505,23 @@ The C<action> is the subroutine run when the option is selected.
 
 The C<submenu> is the menu displayed when the option is selected.
 
-=head4 Attributes
+=head3 Attributes
 
-==head5 $.option-number;
+=head4 $.option-number;
 
 The number of the option
 
-=head5 $.display-string is required;
+=head4 $.display-string is required;
 
 The string shown when an option is printed
 
-=head5 $.submenu is rw;
+=head4 $.submenu is rw;
 
 The submenu executed when an option is selected
 
-=head5 &.action is rw;
+=head4 &.action is rw;
 
 The action executed when an option is selected
 
 =end pod
-
 
