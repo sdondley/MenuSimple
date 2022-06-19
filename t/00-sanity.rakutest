@@ -22,7 +22,7 @@ sub check-process($menu, $value, $expected) {
 
 is Menu, Menu, 'Menu class exists';
 my %methods = Menu =>
-    <display add-option add-options option-count display get-selection process-selection validate-selection display-prompt menu-execute>;
+    <display add-option add-options option-count display get-selection process-selection validate-selection display-prompt execute>;
 for %methods { check-methods(.key, .value) }
 
 is Simple::Option, Simple::Option, 'Item class exists';
