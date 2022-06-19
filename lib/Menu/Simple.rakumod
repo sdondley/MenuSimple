@@ -39,7 +39,7 @@ role Option-group {
     }
 
     multi method add-submenu(Menu:D $menu) {
-        %.options{%counters{self.menID}}.submenu = $menu;
+        %.options{%counters{self.menuID}}.submenu = $menu;
     }
 
     multi method add-submenu(Menu:D $menu, Int:D $option-number) {
@@ -47,7 +47,7 @@ role Option-group {
     }
 
     multi method add-action(&action) {
-        %.options{%counters{self.menID}}.action = &action;
+        %.options{%counters{self.menuID}}.action = &action;
     }
 
     multi method add-action(&action, Int:D $option-number) {
@@ -102,7 +102,7 @@ class Menu does Option-group is export {
     }
 
     method get-selection() {
-        self.selection = getc();
+        self.selection = get();
     }
 
     method validate-selection(--> Bool) {
