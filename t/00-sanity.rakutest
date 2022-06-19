@@ -3,6 +3,8 @@ use Menu::Simple;
 use Test;
 use Test::Output;
 
+plan 29;
+
 sub check-methods($class, List:D $methods) {
     for $methods.Array -> $method {
         is ::($class).^can($method).gist, "($method)", "has $method method";
@@ -15,9 +17,7 @@ sub some-sub {
 
 sub check-process($menu, $value, $expected) {
     $menu.selection = $value;
-    $menu.process-selection;
-    is $menu.validated-selection, $value, 'validates selection' if $expected;
-    is $menu.validated-selection, $value, 'validates selection' if !$expected;
+    is $menu.validate-selection, $expected, 'validates or invalidates selection';
 }
 
 is Menu, Menu, 'Menu class exists';
