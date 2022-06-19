@@ -132,17 +132,14 @@ Menu::Simple - Create, display, and execute a simple option menu on the command 
 
 Simple usage:
 =begin code
-
 my $menu = Menu.new();                              # construct a menu
 $menu.add-options: 'First option', 'Second option'; # add two options to it
 my $selected-option = $menu.execute;                # execute the menu and get the selected option
 my $choice = $selected-option.option-number;        # get the option number selected
-
 =end code
 
 More advanced usage:
 =begin code
-
 # This code will be run after an option is selected
 sub some-action {
   say "running some-action";
