@@ -1,6 +1,7 @@
 Revision history for Menu-Simple
 
 {{$NEXT}}
+    - add menuID instance method and get-menu class method
 
 0.2  2022-06-19T14:48:39-04:00
     - Fix documentation formatting
