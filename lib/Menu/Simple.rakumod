@@ -17,14 +17,19 @@ role Option-group {
     my %counters;
     has %.options;
 
-    method add-options(List:D $options where { $options.all ~~ Str }) {
-        for $options.all -> $display-string {
+
+    method add-options(*@options where { $_.all ~~ Str }) {
+        for @options.all -> $display-string {
             self.add-option(:$display-string);
         }
         return self;
     }
 
-    multi method add-option(Str $display-string, Menu $submenu?, Callable &action?) {
+    multi method add-option(Str $display-string, &action?) {
+        self.add-option(:$display-string, :&action)
+    }
+
+    multi method add-option(Str $display-string, Menu $submenu?, &action?) {
         self.add-option(:$display-string, :$submenu, :&action)
     }
 
