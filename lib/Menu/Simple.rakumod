@@ -24,6 +24,10 @@ role Option-group {
         return self;
     }
 
+    multi method add-option(Str $display-string, Menu $submenu?, Callable &action?) {
+        self.add-option(:$display-string, :$submenu, :&action)
+    }
+
     multi method add-option(Str:D :$display-string, Menu :$submenu, :&action) {
         my $counter = ++%counters{self.menuID};
         self.options{$counter} = Option.new(:&action, :$submenu, :$display-string, option-number => $counter);
