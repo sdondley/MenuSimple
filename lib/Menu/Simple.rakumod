@@ -17,7 +17,6 @@ role Option-group {
     my %counters;
     has %.options;
 
-
     method add-options(*@options where { $_.all ~~ Str }) {
         for @options.all -> $display-string {
             self.add-option(:$display-string);
@@ -243,7 +242,7 @@ my $menu = Menu.new();
 
 Creates a new menu object. Returns the menu object created.
 
-=head4 add-options(List:D $options where { $options.all ~~ Str })
+=head4 add-options(*@options where { $options.all ~~ Str })
 
 =begin code
 
@@ -251,40 +250,41 @@ my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
 
 =end code
 
-Accepts a List of strings which are added to a menu group. Returns the menu
-the option was added to. The items will be shown in the same order as they
-are added to the list.
+Accepts a series of strings to add to a menu group.The items will be shown
+in the same order as they are added to the list.
+
+Returns the menu the option was added to.
 
 I<Use this method to quickly add several menu options to a menu at once.>
 
 =head4 multi add-option(Str:D :$display-string, Menu :$submenu, :&action)
 
-=begin code
+=head4 multi add-option($display-string, Menu $submenu?, &action?)
 
-my $menu = Menu.new();
-$menu.add-option(display-string => $string, submenu => $menu, action => &callable);
+=head4 multi add-option($display-string, Menu $submenu)
 
-=end code
-
-Adds a single option to the menu. It can accept a submenu to display and/or a subroutine
-to execute after the option is selected by the user. Returns the menu the option was added to.
-
-I<Use this method to add an option to a menu that executes a submenu and/or calls a subroutine
-when selected.>
+=head4 multi add-option($display-string, &action)
 
 =head4 multi add-option(Option:D $option)
 
 =begin code
 
-my $menu = Menu.new;
-my $option = Option.new(display-string => $string, submenu => $menu, action => &callable);
-$menu.add-option($option);
+my $menu = Menu.new();
+my $submenu = Menu.new.add-option('Option 1');
+$menu.add-option('Run submenu and action', $submenu, { say 'hi' } );
 
 =end code
 
-Adds an existing option object to the menu.
+Adds a single option to the menu. It can accept a submenu to display and/or a subroutine
+to execute after the option is selected by the user. Options are displayed in the
+menu in the order they were added to the menu.
 
-I<Use this method to add an existing Option object to a menu.>
+Returns the menu the option was added to.
+
+I<Use this method to add an option to a menu that executes a submenu and/or calls a subroutine
+when selected.>
+
+=begin code
 
 =head4 execute()
 
