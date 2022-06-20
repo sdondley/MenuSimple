@@ -4,7 +4,7 @@ use Test;
 use Test::Output;
 
 
-plan 33;
+plan 35;
 
 sub check-methods($class, List:D $methods) {
     for $methods.Array -> $method {
@@ -36,6 +36,8 @@ is $menu.options.elems, 1, 'adds menu option';
 $menu.add-option(display-string => 'Option 2');
 is $menu.options.elems, 2, 'adds another menu option';
 
+lives-ok { $menu.add-option: 'hello' }, 'can add option as string';
+
 dies-ok { $menu.add-option() }, 'dies with no display string';
 
 stdout-like { $menu.display }, /Option\s1\n/, 'outputs option 1';
@@ -46,7 +48,8 @@ stdout-like { $menu.display }, /^^1\s\-\sOption/, 'outputs option format';
 
 check-process($menu, 1, True );
 check-process($menu, 2, True );
-check-process($menu, 3, False );
+check-process($menu, 3, True );
+check-process($menu, 4, False );
 check-process($menu, '', False );
 check-process($menu, "\n", False );
 check-process($menu, 'kjksdjf', False );
@@ -70,6 +73,7 @@ is $option.submenu.^name, 'Simple::Menu', 'returns a menu';
 
 # test menu IDs;
 is 'Simple::Menu', Menu.get-menu(3).^name, 'gets a menu from a menu ID';
+
 
 done-testing;
 
