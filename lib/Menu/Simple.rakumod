@@ -99,9 +99,12 @@ class Menu does Option-group is export {
 
     multi method execute() {
         self.display;
-        self.get-selection if !self.selection;
-        self.process-selection;
-        my $option = self.get-option(self.validated-selection);
+        my $option;
+        while !$option {
+            self.get-selection if !self.selection;
+            self.process-selection;
+            $option = self.get-option(self.validated-selection);
+        }
         if $option.action {
             $option.action()();
         }
