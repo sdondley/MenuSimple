@@ -2,9 +2,7 @@ use v6.d;
 
 unit module Simple;
 
-class Menu {
-    ...
-}
+class Menu { ... }
 
 class Option {
     has Int $.option-number;
@@ -72,8 +70,8 @@ role Option-group {
 
     method display-group() {
         my $format = self.option-format ~ $.option-separator;
-        for self.options.sort>>.kv -> ($k, $v) {
-            printf $format, $k, $v.display-string;
+        for self.options.sort {
+            printf $format, .key, .value.display-string;
         }
     }
 
@@ -111,15 +109,12 @@ class Menu does Option-group is export {
 
     multi method execute() {
         self.display;
-        my $option;
-        while !$option {
+        repeat {
             self.get-selection if !self.selection;
             self.process-selection;
-            $option = self.get-option(self.validated-selection);
-        }
-        if $option.action {
-            $option.action()();
-        }
+        } while !self.validated-selection;
+        my $option = self.get-option(self.validated-selection);
+        $option.action()() if $option.aciton;
         return $option.submenu ?? $option.submenu.execute !! $option;
     }
 
@@ -583,4 +578,3 @@ The submenu executed when an option is selected
 The action executed when an option is selected
 
 =end pod
-
