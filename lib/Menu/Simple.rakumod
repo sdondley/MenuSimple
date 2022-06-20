@@ -206,7 +206,7 @@ is given back to to code calling the menu.
 
 =head2 Menu Class
 
-=head3 Higher level methods
+=head3 Higher level instance methods
 
 The following higher level methods are the most useful methods for generating and
 executing menus.
@@ -343,7 +343,7 @@ The action is executed when the option is selected by the user.
 
 I<Use this method to execute an action when the option is selected.>
 
-=head4 Lower level methods
+=head3 Lower level instance methods
 
 The Menu class methods below are typically not called directly and are provided
 in case you wish to override them or have more control over how menus are executed.
@@ -451,7 +451,35 @@ $menu.process-selection;
 
 =end code
 
-Validates the user's selection and re-prompts user if selection is not valid.
+=head4 menuID()
+
+=begin code
+
+my $menu1 = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $menu2 = Menu.new().add-options: <Option A, Option B, Option C>;
+$menu1.menuID;   # returns the Int value '1'
+$menu2.menuID;   # returns the Int value '2'
+
+=end code
+
+Returns the internal menu id of the menu.
+
+I<This is a lower level method and is not usually not run directly.>
+
+=head3 Class methods
+
+=head4 get-menu(Int:D $id)
+
+=begin code
+
+my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $submenu = Menu.new().add-options: <Option A, Option B, Option C>;
+Menu.get-menu(1);   # returns $menu
+Menu.get-menu(2);   # returns $submenu
+
+=end code
+
+Returns the menu that corresponds to the C<$id> passed to C<get-menu>
 
 I<This is a lower level method and is not usually not run directly.>
 
