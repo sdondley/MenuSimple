@@ -1,6 +1,8 @@
 Revision history for Menu-Simple
 
 {{$NEXT}}
+    - easier to add individual options to a menu
+    - fix a bug that tried to execute subemenus and actions on invalid choice
 
 0.4  2022-06-20T11:04:40-04:00
     - minor doc improvements
