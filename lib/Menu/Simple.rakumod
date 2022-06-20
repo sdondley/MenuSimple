@@ -68,18 +68,30 @@ role Option-group {
     method option-count() {
         return %counters{self.menuID};
     }
-
 }
 
 class Menu does Option-group is export {
     my $ID = 0;
-    has Int $.menuID = ++$ID;
+    my %menus;
+    has Int $!menuID = ++$ID;
     has Str $.option-format is rw = "%d - %s";
     has Str() $.selection is rw;
     has Str() $.validated-selection is rw = Nil;
     has Str $.option-separator is rw = "\n";
     has Str $.prompt = "\nMake selection: ";
     has Str $.error-msg = "\nSorry, invalid entry. Try again. ";
+
+    method menuID {
+        $!menuID;
+    }
+
+    submethod TWEAK() {
+        %menus{self.menuID} = self;
+    }
+
+    method get-menu(::?CLASS:U $MENU: Int:D $id)  {
+        %menus{$id};
+    }
 
     multi method execute() {
         self.display;
