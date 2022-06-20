@@ -3,7 +3,8 @@ use Menu::Simple;
 use Test;
 use Test::Output;
 
-plan 32;
+
+plan 33;
 
 sub check-methods($class, List:D $methods) {
     for $methods.Array -> $method {
@@ -66,6 +67,9 @@ stdout-like { $option.action()() }, /done/, 'executes action';
 lives-ok { $menu2.add-action( { say 'do this' }) }, 'adds action';
 lives-ok { $menu2.add-action( { say 'do this' }, 1) }, 'adds action';
 is $option.submenu.^name, 'Simple::Menu', 'returns a menu';
+
+# test menu IDs;
+is 'Simple::Menu', Menu.get-menu(3).^name, 'gets a menu from a menu ID';
 
 done-testing;
 
