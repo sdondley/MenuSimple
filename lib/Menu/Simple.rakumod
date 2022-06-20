@@ -25,11 +25,19 @@ role Option-group {
         return self;
     }
 
-    multi method add-option(Str $display-string, &action?) {
+    multi method add-option(Str $display-string) {
+        self.add-option(:$display-string)
+    }
+
+    multi method add-option(Str $display-string, &action) {
         self.add-option(:$display-string, :&action)
     }
 
-    multi method add-option(Str $display-string, Menu $submenu?, &action?) {
+    multi method add-option(Str $display-string, Menu $submenu) {
+        self.add-option(:$display-string, :$submenu)
+    }
+
+    multi method add-option(Str $display-string, Menu $submenu, &action) {
         self.add-option(:$display-string, :$submenu, :&action)
     }
 
