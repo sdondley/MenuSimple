@@ -1,6 +1,8 @@
 Revision history for Menu-Simple
 
 {{$NEXT}}
+    - tightened up some code logic
+    - bug fix: allow selected option to run code
 
 0.5  2022-06-20T13:24:49-04:00
     - easier to add individual options to a menu
