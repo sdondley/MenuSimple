@@ -15,5 +15,14 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Test" type="perl6">
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="raku://1166011399:Test!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>
