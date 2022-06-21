@@ -2,6 +2,10 @@ use v6.d;
 
 unit module Simple;
 
+sub dist is export {
+    return $?DISTRIBUTION;
+}
+
 class Menu { ... }
 
 class Option {
@@ -114,7 +118,7 @@ class Menu does Option-group is export {
             self.process-selection;
         } while !self.validated-selection;
         my $option = self.get-option(self.validated-selection);
-        $option.action()() if $option.aciton;
+        $option.action()() if $option.action;
         return $option.submenu ?? $option.submenu.execute !! $option;
     }
 
