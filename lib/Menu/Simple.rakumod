@@ -10,6 +10,7 @@ class Menu { ... }
 
 class Option {
     has Int $.option-number;
+    has Int $.parent-menu;
     has Str $.display-string is required;
     has Menu $.submenu is rw;
     has &.action is rw;
@@ -44,7 +45,13 @@ role Option-group {
 
     multi method add-option(Str:D :$display-string, Menu :$submenu, :&action) {
         my $counter = ++%counters{self.menuID};
-        self.options{$counter} = Option.new(:&action, :$submenu, :$display-string, option-number => $counter);
+        my $parent-menu = self.menuID;
+        self.options{$counter} = Option.new(
+                :&action,
+                :$submenu,
+                :$display-string,
+                :$parent-menu,
+                option-number => $counter);
         return self;
     }
 
@@ -93,7 +100,6 @@ role Option-group {
 
     method counter-init() {
         %counters{self.menuID} = 0;
-
     }
 }
 
