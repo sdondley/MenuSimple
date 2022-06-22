@@ -1,0 +1,28 @@
+use v6.d;
+use Test;
+use Menu::Simple;
+
+my $menu = Menu.new();
+$menu.add-option: 'hi';
+$menu.add-option: 'bye';
+
+is $menu.get-option(1).^name, 'Simple::Option', 'gets option from number';
+is $menu.get-option('2').^name, 'Simple::Option', 'gets option from string';
+
+my $option = $menu.get-option: 1;
+is $option.parent-menuID, 1, 'gets parent menu';
+
+my $submenu = Menu.new();
+$submenu.add-option('bones');
+is $menu.get-counters, {1 => 2, 2 => 1}, 'gets counters';
+
+$menu.add-submenu: $submenu, 1;
+is $option.child-menuID, 2, 'gets child menu id';
+
+my $submenu2 = Menu.new;
+$menu.add-option('wooba', $submenu2);
+
+$option = $menu.get-option: 3;
+is $option.child-menuID, 3, 'gets child menu id';
+
+done-testing;
