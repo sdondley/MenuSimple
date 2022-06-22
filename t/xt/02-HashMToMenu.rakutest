@@ -25,7 +25,13 @@ multi sub recurse($value, $parent-menu) {
 }
 
 my %simple = one => 'Option A', 'two' => 'blah', 'z option' => {submenu1 => { subsubmenu => 1}, submenu2 => 'hello' };
-lives-ok { recurse %simple }, 'can recurse menu without dying';
+
+if %*ENV<AUTHOR_TESTING> {
+    lives-ok { recurse %simple }, 'can recurse menu without dying';
+} else {
+    skip 'Skipping author test';
+    exit;
+}
 
 @menus[0].execute;
 
