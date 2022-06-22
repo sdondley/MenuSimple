@@ -1,6 +1,8 @@
 Revision history for Menu-Simple
 
 {{$NEXT}}
+
+0.6  2022-06-22T00:41:30-04:00
     - added an improved internal ID trackers for options and menus
         - counter is initialized for new menus
         - add parent/child-menuID attributes to menus

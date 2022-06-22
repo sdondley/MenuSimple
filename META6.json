@@ -1,24 +1,27 @@
 {
-  "name": "Menu::Simple",
-  "description": "Create, display, and execute a simple option menu on the command line",
-  "version": "0.5",
-  "perl": "6.*",
+  "auth": "zef:sdondley",
   "authors": [
     "Steve Dondley"
   ],
-  "auth": "zef:sdondley",
-  "depends": [],
-  "build-depends": [],
-  "test-depends": [
-    "Test::Output"
+  "build-depends": [
   ],
+  "depends": [
+  ],
+  "description": "Create, display, and execute a simple option menu on the command line",
+  "license": "Artistic-2.0",
+  "name": "Menu::Simple",
+  "perl": "6.*",
   "provides": {
     "Menu::Simple": "lib/Menu/Simple.rakumod"
   },
   "resources": [
     "testing/test.txt"
   ],
-  "license": "Artistic-2.0",
-  "tags": [],
-  "source-url": "https://github.com/sdondley/MenuSimple.git"
+  "source-url": "https://github.com/sdondley/MenuSimple.git",
+  "tags": [
+  ],
+  "test-depends": [
+    "Test::Output"
+  ],
+  "version": "0.6"
 }

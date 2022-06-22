@@ -186,7 +186,7 @@ Outputs a menu's option group to the command line.
 
 *This is a lower level method and is not usually not run directly.*
 
-#### get-option(Str:D $option-number)
+#### get-option($option-number where Str:D|Int:D)
 
     my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
     my $option = $menu.get-option(3);
@@ -262,6 +262,12 @@ Returns the menu that corresponds to the `$id` passed to `get-menu`
 
 *This is a lower level method and is not usually not run directly.*
 
+#### get-counters()
+
+Dumps the hash containing the options counters for all menus
+
+*This is a lower level method and is not usually not run directly.*
+
 ### Attributes
 
 #### %.options
@@ -330,6 +336,17 @@ The string shown when an option is printed
 #### $.submenu is rw;
 
 The submenu executed when an option is selected
+
+#### Int $.parent-menuID is rw;
+
+The menuID of the option belongs to
+
+headr
+=====
+
+Int $.child-menuID is rw;
+
+The menuID of the submenu the option executes. Return 0 if none.
 
 #### &.action is rw;
 
