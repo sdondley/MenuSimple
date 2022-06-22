@@ -1,6 +1,10 @@
 Revision history for Menu-Simple
 
 {{$NEXT}}
+    - added an improved internal ID trackers for options and menus
+        - counter is initialized for new menus
+        - add parent/child-menuID attributes to menus
+        - new methods for accessing counters
 
 0.6  2022-06-20T22:50:56-04:00
     - tightened up some code logic
