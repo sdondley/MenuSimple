@@ -79,7 +79,7 @@ role Option-group {
         }
     }
 
-    method get-option(Str:D $option-number) {
+    method get-option($option-number where Str:D|Int:D) {
         self.options{$option-number};
     }
 
@@ -395,7 +395,7 @@ Outputs a menu's option group to the command line.
 
 I<This is a lower level method and is not usually not run directly.>
 
-=head4 get-option(Str:D $option-number)
+=head4 get-option($option-number where Str:D|Int:D)
 
 =begin code
 
