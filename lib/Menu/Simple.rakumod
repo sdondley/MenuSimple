@@ -76,6 +76,9 @@ role Option-group {
 
     multi method add-submenu(Menu:D $menu, Int:D $option-number) {
         %.options{$option-number}.submenu = $menu;
+        $menu.is-submenu = True;
+        %counters{$menu.menuID} = -1; #start the counter at -1
+        $menu.add-option(display-string => 'Parent menu', action => { self.execute });
         %.options{$option-number}.child-menuID = $menu.menuID;
     }
 
@@ -121,6 +124,7 @@ class Menu does Option-group is export {
     has Str $.option-separator is rw = "\n";
     has Str $.prompt = "\nMake selection: ";
     has Str $.error-msg = "\nSorry, invalid entry. Try again. ";
+    has Bool $.is-submenu is rw = False;
 
     method menuID {
         $!menuID;
@@ -164,7 +168,7 @@ class Menu does Option-group is export {
     method validate-selection(--> Bool) {
         self.validated-selection = Nil;
         my $valid = False;
-        try { $valid = self.selection > 0 && !(self.selection > self.option-count) };
+        try { $valid = self.selection >= self.options.keys.sort.first && !(self.selection > self.option-count) };
         return $valid;
     }
 
