@@ -106,7 +106,7 @@ role Option-group {
         return %counters;
     }
 
-    method counter-init() {
+    method !counter-init() {
         %counters{self.menuID} = 0;
     }
 }
@@ -126,10 +126,9 @@ class Menu does Option-group is export {
         $!menuID;
     }
 
-
     submethod TWEAK() {
         %menus{self.menuID} = self;
-        self.counter-init;
+        self!counter-init;
     }
 
     method get-menu(::?CLASS:U $MENU: Int:D $id)  {
@@ -531,6 +530,13 @@ Returns the menu that corresponds to the C<$id> passed to C<get-menu>
 
 I<This is a lower level method and is not usually not run directly.>
 
+=head4 get-counters()
+
+Dumps the hash containing the options counters for all menus
+
+I<This is a lower level method and is not usually not run directly.>
+
+
 =head3 Attributes
 
 =head4 %.options
@@ -603,6 +609,14 @@ The string shown when an option is printed
 =head4 $.submenu is rw;
 
 The submenu executed when an option is selected
+
+=head4 Int $.parent-menuID is rw;
+
+The menuID of the option belongs to
+
+=headr Int $.child-menuID is rw;
+
+The menuID of the submenu the option executes. Return 0 if none.
 
 =head4 &.action is rw;
 
