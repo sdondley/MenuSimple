@@ -70,11 +70,13 @@ role Option-group {
     }
 
     multi method add-submenu(Menu:D $menu) {
-        %.options{%counters{self.menuID}}.submenu = $menu;
+        my $option-number = %counters{self.menuID};
+        self.add-submenu($menu, $option-number);
     }
 
     multi method add-submenu(Menu:D $menu, Int:D $option-number) {
         %.options{$option-number}.submenu = $menu;
+        %.options{$option-number}.child-menuID = $menu.menuID;
     }
 
     multi method add-action(&action) {
