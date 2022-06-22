@@ -1,6 +1,5 @@
 use v6.d;
 use Test;
-use Data::Dump;
 use Menu::Simple;
 
 plan 1;
@@ -28,12 +27,13 @@ my %simple = one => 'Option A', 'two' => 'blah', 'z option' => {submenu1 => { su
 
 if %*ENV<AUTHOR_TESTING> {
     lives-ok { recurse %simple }, 'can recurse menu without dying';
+    require Data::Dump;
+    @menus[0].execute;
 } else {
     skip 'Skipping author test';
     exit;
 }
 
-@menus[0].execute;
 
 
 done-testing;
