@@ -614,7 +614,7 @@ The submenu executed when an option is selected
 
 The menuID of the option belongs to
 
-=headr Int $.child-menuID is rw;
+=head4 Int $.child-menuID is rw;
 
 The menuID of the submenu the option executes. Return 0 if none.
 
