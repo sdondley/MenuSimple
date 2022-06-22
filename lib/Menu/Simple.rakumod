@@ -86,6 +86,15 @@ role Option-group {
     method option-count() {
         return %counters{self.menuID};
     }
+
+    method get-counters() {
+        return %counters;
+    }
+
+    method counter-init() {
+        %counters{self.menuID} = 0;
+
+    }
 }
 
 class Menu does Option-group is export {
@@ -103,13 +112,17 @@ class Menu does Option-group is export {
         $!menuID;
     }
 
+
     submethod TWEAK() {
         %menus{self.menuID} = self;
+        self.counter-init;
     }
 
     method get-menu(::?CLASS:U $MENU: Int:D $id)  {
         %menus{$id};
     }
+
+    #method get-counter(::?CLASS:U $)
 
     multi method execute() {
         self.display;
