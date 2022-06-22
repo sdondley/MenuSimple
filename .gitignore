@@ -1,4 +1,4 @@
 .precomp/
-/*.iml
+*.iml
 .idea
 /Menu-Simple-*
