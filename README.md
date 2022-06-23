@@ -70,7 +70,7 @@ Generate a menu from a hash:
     my $menu = HashToMenu.new(%hash2);
     $menu.execute
 
-Subroutines for adding actions and processing values of selected options can also be added to the menu with `HashToMenu`. See the [Menu::HashToMenu](Menu::HashToMenu) for more details.
+Subroutines for adding actions and processing values of selected options can also be added to the menu with `HashToMenu`. See the [Menu::HashToMenu](Menu::HashToMenu) class for more details.
 
 INSTALLATION
 ============
