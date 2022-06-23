@@ -185,62 +185,6 @@ class Menu does Option-group is export {
     }
 }
 
-class HashToMenu is export {
-    has %.hash;
-    has @.menus;
-    has $.menu is rw;
-    has &.value-action;
-    has &.value-processor;  # does arbitrary stuff to hash values
-
-    multi method new(Hash:D $hash, &value-action) {
-        self.bless(:$hash, :&value-action);
-    }
-
-    multi method new(Hash:D $hash, &value-action, &value-processor) {
-        self.bless(:$hash, :&value-action, :&value-processor);
-    }
-
-    multi method new(Hash:D $hash, :&value-action, :&value-processor) {
-        self.bless(:$hash, :&value-action, :&value-processor);
-    }
-
-    method execute() {
-        self.menu.execute;
-    }
-
-    submethod TWEAK() {
-        self.recurse(self.hash);
-        return self.menu;
-    }
-
-    multi method recurse(Hash:D $hash, $sm?) {
-        my $menu = $sm || Menu.new();  # initialize main menu
-        push self.menus, $menu;
-        for $hash.sort {
-            when .value ~~ Hash {
-                my $submenu = Menu.new;
-                $menu.add-option(.key, :$submenu).add-submenu($submenu);
-                self.recurse(.value, $submenu);
-            }
-            self.recurse(.key, .value, $menu);
-        }
-        self.menu = $menu;
-    }
-
-    multi method recurse($key, $value, $parent-menu) {
-        $parent-menu.add-option($key.Str, $value);
-        if self.value-action {
-            if self.value-processor {
-                my $processed-value = self.value-processor()($value);
-                my &p = { self.value-action()($processed-value) };
-                $parent-menu.add-action(&p);
-            } else {
-                $parent-menu.add-action(self.value-action);
-            }
-        }
-    }
-
-}
 
 =begin pod
 
