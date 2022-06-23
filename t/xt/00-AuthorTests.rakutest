@@ -3,14 +3,12 @@ use v6.d;
 use lib '.';
 use Test;
 use Test::Output;
-use Menu::Simple;
+use Menu::HashToMenu;
 
 plan 3;
 
-my @menus;
 my %hash = one => 'Option A', 'two' => 'blah', 'z option' => {submenu1 => { subsubmenu => 1}, submenu2 => 'hello' };
-is HashToMenu.new(%hash).WHAT, Simple::HashToMenu, 'class exists';
-
+is HashToMenu.new(%hash).WHAT, HashToMenu, 'class exists';
 
 when !%*ENV<AUTHOR_TESTING> { skip 'Skipping author tests'; }
 
