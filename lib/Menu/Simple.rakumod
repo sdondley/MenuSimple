@@ -13,6 +13,7 @@ class Option {
     has Int $.parent-menuID is rw;
     has Int $.child-menuID is rw;
     has Str $.display-string is required;
+    has Any $.option-value;
     has Menu $.submenu is rw;
     has &.action is rw;
 }
@@ -28,35 +29,37 @@ role Option-group {
         return self;
     }
 
-    multi method add-option(Str $display-string) {
-        self.add-option(:$display-string)
+    multi method add-option(Str $display-string, $option-value? where * !~~ Menu|Callable) {
+        self.add-option(:$display-string, :$option-value)
     }
 
-    multi method add-option(Str $display-string, &action) {
-        self.add-option(:$display-string, :&action)
+    multi method add-option(Str $display-string, &action, $option-value?) {
+        self.add-option(:$display-string, :&action, :$option-value)
     }
 
-    multi method add-option(Str $display-string, Menu $submenu) {
-        self.add-option(:$display-string, :$submenu)
+    multi method add-option(Str $display-string, Menu $submenu, $option-value?) {
+        self.add-option(:$display-string, :$submenu, :$option-value)
     }
 
-    multi method add-option(Str $display-string, Menu $submenu, &action) {
-        self.add-option(:$display-string, :$submenu, :&action)
+    multi method add-option(Str $display-string, Menu $submenu, &action, $option-value?) {
+        self.add-option(:$display-string, :$submenu, :&action, :$option-value)
     }
 
-    multi method add-option(Str:D :$display-string, Menu :$submenu, :&action) {
+    multi method add-option(Str:D :$display-string, Menu :$submenu, :&action, :$option-value) {
         my $counter = ++%counters{self.menuID};
         my $parent-menuID = self.menuID;
         my $child-menuID = 0;
         if $submenu {
             $child-menuID = $submenu.menuID if $submenu;
         }
+
         self.options{$counter} = Option.new(
                 :&action,
                 :$submenu,
                 :$display-string,
                 :$parent-menuID,
                 :$child-menuID,
+                :$option-value,
                 option-number => $counter);
         return self;
     }
@@ -148,7 +151,7 @@ class Menu does Option-group is export {
             self.process-selection;
         } while !self.validated-selection;
         my $option = self.get-option(self.validated-selection);
-        $option.action()() if $option.action;
+        $option.action()($option.option-value) if $option.action;
         return $option.submenu ?? $option.submenu.execute !! $option;
     }
 
@@ -182,6 +185,63 @@ class Menu does Option-group is export {
     }
 }
 
+class HashToMenu is export {
+    has %.hash;
+    has @.menus;
+    has $.menu is rw;
+    has &.value-action;
+    has &.value-processor;  # does arbitrary stuff to hash values
+
+    multi method new(Hash:D $hash, &value-action) {
+        self.bless(:$hash, :&value-action);
+    }
+
+    multi method new(Hash:D $hash, &value-action, &value-processor) {
+        self.bless(:$hash, :&value-action, :&value-processor);
+    }
+
+    multi method new(Hash:D $hash, :&value-action, :&value-processor) {
+        self.bless(:$hash, :&value-action, :&value-processor);
+    }
+
+    method execute() {
+        self.menu.execute;
+    }
+
+    submethod TWEAK() {
+        self.recurse(self.hash);
+        return self.menu;
+    }
+
+    multi method recurse(Hash:D $hash, $sm?) {
+        my $menu = $sm || Menu.new();  # initialize main menu
+        push self.menus, $menu;
+        for $hash.sort {
+            when .value ~~ Hash {
+                my $submenu = Menu.new;
+                $menu.add-option(.key, :$submenu).add-submenu($submenu);
+                self.recurse(.value, $submenu);
+            }
+            self.recurse(.key, .value, $menu);
+        }
+        self.menu = $menu;
+    }
+
+    multi method recurse($key, $value, $parent-menu) {
+        $parent-menu.add-option($key.Str, $value);
+        if self.value-action {
+            if self.value-processor {
+                my $processed-value = self.value-processor()($value);
+                my &p = { self.value-action()($processed-value) };
+                $parent-menu.add-action(&p);
+            } else {
+                $parent-menu.add-action(self.value-action);
+            }
+        }
+    }
+
+}
+
 =begin pod
 
 =head1 NAME
@@ -208,7 +268,7 @@ sub some-action {
 }
 
 # Construct a submenu and add two options to it
-my $submenu = Menu.new().add-options: <First option, Second option>;
+my $submenu = Menu.new().add-options: <'First option', 'Second option'>;
 
 # Create a main menu
 my $menu = Menu.new();
@@ -222,14 +282,14 @@ $menu.add-option(
 # Add an option that will show the submenu
 $menu.add-option(
     submenu        => $submenu,
-    display-string => "Show submenu"
+    display-string => 'Show submenu'
 );
 
 # Add an option that calls the action and shows the submenu
 $menu.add-option(
     action         => &some-action,
     submenu        => $submenu,
-    display-string => "Do an action and show submenu" );
+    display-string => 'Do an action and show submenu' );
 
 # Execute the menu
 $menu.execute;
@@ -285,7 +345,7 @@ Creates a new menu object. Returns the menu object created.
 
 =begin code
 
-my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 
 =end code
 
@@ -329,7 +389,7 @@ when selected.>
 
 =begin code
 
-my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 $menu.execute;
 
 =end code
@@ -347,9 +407,9 @@ executing responses to a user's selection after a menu is built.>
 
 =begin code
 
-my $main-menu = Menu.new().add-options: <Option A, Option B>;
+my $main-menu = Menu.new().add-options: <'Option A', 'Option B'>;
 $main-menu.add-option: Option.new(display-string => 'Some string');
-my $submenu = Menu.new().add-options: <Option A, Option B, Option C>
+my $submenu = Menu.new().add-options: <'Option A', 'Option B', 'Option C'>
 $main-menu.add-submenu($submenu);
 
 =end code
@@ -363,8 +423,8 @@ I<Use this method to add a submenu to the last option in an existing menu.>
 
 =begin code
 
-my $main-menu = Menu.new.add-options: <Option A, Option B>;
-my $submmenu = Menu.new.add-options: <Option 1, Option 2, Option 3>;
+my $main-menu = Menu.new.add-options: <'Option A', 'Option B'>;
+my $submmenu = Menu.new.add-options: <'Option 1', 'Option 2', 'Option 3'>;
 $main-menu.add-submenu($submenu, 1);   # adds a submenu to o 'Option A'
 
 =end code
@@ -394,7 +454,7 @@ I<Use this method to add an action that's executed when an option is selected.>
 
 =begin code
 
-my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 $menu.add-action({ say 'running action'}, 1);   # adds the action to o 'Option 1'
 
 =end code
@@ -413,7 +473,7 @@ in case you wish to override them or have more control over how menus are execut
 
 =begin code
 
-my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 $menu.display;
 
 =end code
@@ -426,7 +486,7 @@ I<This is a lower level method and is not usually not run directly.>
 
 =begin code
 
-my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 $menu.display-group;
 
 =end code
@@ -439,7 +499,7 @@ I<This is a lower level method and is not usually not run directly.>
 
 =begin code
 
-my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 my $option = $menu.get-option(3);
 
 =end code
@@ -453,7 +513,7 @@ I<This is a lower level method and is not usually not run directly.>
 
 =begin code
 
-my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 my $count = $menu.option-count();
 
 =end code
@@ -466,7 +526,7 @@ I<This is a lower level method and is not usually not run directly.>
 
 =begin code
 
-my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 $menu.prompt;
 
 =end code
@@ -479,7 +539,7 @@ I<This is a lower level method and is not usually not run directly.>
 
 =begin code
 
-my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 $menu.get-selection;
 
 =end code
@@ -492,7 +552,7 @@ I<This is a lower level method and is not usually not run directly.>
 
 =begin code
 
-my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 $menu.selection = 3;
 my $is-valid = $menu.validate-selection;
 
@@ -506,7 +566,7 @@ I<This is a lower level method and is not usually not run directly.>
 
 =begin code
 
-my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
+my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 $menu.selection = 2;
 $menu.process-selection;
 
@@ -516,8 +576,8 @@ $menu.process-selection;
 
 =begin code
 
-my $menu1 = Menu.new().add-options: <Option 1, Option 2, Option 3>;
-my $menu2 = Menu.new().add-options: <Option A, Option B, Option C>;
+my $menu1 = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
+my $menu2 = Menu.new().add-options: <'Option A', 'Option B', 'Option C'>;
 $menu1.menuID;   # returns the Int value '1'
 $menu2.menuID;   # returns the Int value '2'
 
@@ -533,8 +593,8 @@ I<This is a lower level method and is not usually not run directly.>
 
 =begin code
 
-my $menu = Menu.new().add-options: <Option 1, Option 2, Option 3>;
-my $submenu = Menu.new().add-options: <Option A, Option B, Option C>;
+my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
+my $submenu = Menu.new().add-options: <'Option A', 'Option B', 'Option C'>;
 Menu.get-menu(1);   # returns $menu
 Menu.get-menu(2);   # returns $submenu
 
