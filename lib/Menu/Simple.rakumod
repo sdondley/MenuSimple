@@ -265,7 +265,7 @@ $menu.execute
 
 Subroutines for adding actions and processing values of selected options
 can also be added to the menu with C<HashToMenu>. See the L<Menu::HashToMenu>
-for more details.
+class for more details.
 
 =head1 INSTALLATION
 
