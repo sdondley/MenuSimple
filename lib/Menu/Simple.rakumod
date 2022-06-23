@@ -196,6 +196,8 @@ Menu::Simple - Create, display, and execute a simple option menu on the command 
 
 Simple usage:
 =begin code
+use Menu::Simple;
+
 my $m = Menu.new();         # construct a menu
 $m.add-option: 'Opt A';     # add options to it
 $m.add-option: 'Opt B';
@@ -206,6 +208,8 @@ say $option.option-number;  # get user's choice
 
 More advanced usage:
 =begin code
+use Menu::Simple;
+
 # The code to run after an option is selected
 sub some-action {
   say "running some-action";
@@ -220,12 +224,14 @@ my $menu = Menu.new();
 # Add an option to the main menu with an action that runs an action
 $menu.add-option(
     action => &some-action,
+    option-value => 'some value',
     display-string => "Do an action"
 );
 
 # Add an option that will show the submenu
 $menu.add-option(
     submenu        => $submenu,
+    option-value => 'some other value',
     display-string => 'Show submenu'
 );
 
@@ -239,6 +245,27 @@ $menu.add-option(
 $menu.execute;
 
 =end code
+
+Generate a menu from a hash:
+=begin code
+
+use Menu::HashtoMenu;
+
+my %hash = 'Option A' => 'Value A',
+    'Option B' => 'Value B',
+    'Option C' =>
+        {submenu1 =>
+            { subsubmenu => 1},
+            submenu2 => 'hello' };
+
+my $menu = HashToMenu.new(%hash2);
+$menu.execute
+
+=end code
+
+Subroutines for adding actions and processing values of selected options
+can also be added to the menu with C<HashToMenu>. See the L<Menu::HashToMenu>
+for more details.
 
 =head1 INSTALLATION
 
@@ -619,6 +646,10 @@ The C<submenu> is the menu displayed when the option is selected.
 =head4 $.option-number;
 
 The number of the option
+
+=head4 $.option-value;
+
+An optional value associated with an option
 
 =head4 $.display-string is required;
 
