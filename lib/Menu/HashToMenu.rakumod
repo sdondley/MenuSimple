@@ -132,3 +132,4 @@ This is the callable that can be used to process the value associated with a men
 before getting passed to the C<&action> callable. If no C<&processor> is supplied,
 the value from the hash is passed directly to the option's C<&action> callable.
 
+=end pod
