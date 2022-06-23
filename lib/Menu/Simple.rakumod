@@ -327,15 +327,15 @@ Returns the menu the option was added to.
 
 I<Use this method to quickly add several menu options to a menu at once.>
 
-=head4 multi add-option(Str:D :$display-string, Menu :$submenu, :&action)
+=head4 multi method add-option(Str $display-string, $option-value? where * !~~ Menu|Callable)
 
-=head4 multi add-option($display-string, Menu $submenu?, &action?)
+=head4 multi method add-option(Str $display-string, &action, $option-value?)
 
-=head4 multi add-option($display-string, Menu $submenu)
+=head4 multi method add-option(Str $display-string, Menu $submenu, $option-value?)
 
-=head4 multi add-option($display-string, &action)
+=head4 multi method add-option(Str $display-string, Menu $submenu, &action, $option-value?)
 
-=head4 multi add-option(Option:D $option)
+=head4 multi method add-option(Str:D :$display-string, Menu :$submenu, :&action, :$option-value)
 
 =begin code
 
@@ -347,7 +347,8 @@ $menu.add-option('Run submenu and action', $submenu, { say 'hi' } );
 
 Adds a single option to the menu. It can accept a submenu to display and/or a subroutine
 to execute after the option is selected by the user. Options are displayed in the
-menu in the order they were added to the menu.
+menu in the order they were added to the menu. A value can optionally be associated with
+a value.
 
 Returns the menu the option was added to.
 
