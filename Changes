@@ -2,6 +2,10 @@ Revision history for Menu-Simple
 
 {{$NEXT}}
 
+0.12  2022-06-23T15:59:01-04:00
+    - get tests to pass
+    - doc fix
+
 0.11  2022-06-23T15:45:27-04:00
     - documented features of module
     - new feature: create menu from a hash
