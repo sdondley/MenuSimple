@@ -5,7 +5,7 @@ use Test;
 use Test::Output;
 use Menu::HashToMenu;
 
-plan 3;
+%*ENV<AUTHOR_TESTING> ?? plan 3 !! plan 2;
 
 my %hash = one => 'Option A', 'two' => 'blah', 'z option' => {submenu1 => { subsubmenu => 1}, submenu2 => 'hello' };
 is HashToMenu.new(%hash).WHAT, HashToMenu, 'class exists';
