@@ -252,6 +252,16 @@ can be executed, or both a submenu and an action can be executed. If neither
 a submenu or action is executed, an option's object is returned back can control
 is given back to to code calling the menu.
 
+=head2 Current Features
+
+=item Unlimited number of options can go on a menu
+=item Options can execute a submenu which can be nested to an unlimited depth
+=item Options can also execute an action which can run arbitrary code
+=item Can traverse back to parent menu from submenu
+=item Menus are displayed on the command line
+=item User selections are validated
+=item Customizable prompt and option delimiter
+
 =head1 CLASSES AND METHODS
 
 =head2 Menu Class
