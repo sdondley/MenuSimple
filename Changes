@@ -1,6 +1,7 @@
 Revision history for Menu-Simple
 
 {{$NEXT}}
+    - doc fix
 
 0.12  2022-06-23T15:59:01-04:00
     - get tests to pass

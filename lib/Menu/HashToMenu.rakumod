@@ -43,6 +43,7 @@ class HashToMenu is export {
         self.menu = $menu;
     }
 
+    # called when hash value is not a hash
     multi method recurse($key, $value, $parent-menu) {
         $parent-menu.add-option($key.Str, $value);
         if self.value-action {
@@ -111,9 +112,11 @@ when an option is selected.
 
 =head2 METHODS
 
+=head3 multi method new(Hash:D $hash)
+
 =head3 multi method new(Hash:D $hash, &value-action)
-=head3 multi method new(Hash:D $hash, &value-action, &value-processor)
-=head3 method new(Hash:D $hash, :&value-action, :&value-processor)
+
+=head3 multi method new(Hash:D $hash, :&value-action, :&value-processor)
 
 =head4 %hash
 
