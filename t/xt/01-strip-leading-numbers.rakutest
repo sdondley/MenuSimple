@@ -1,0 +1,24 @@
+#!/usr/bin/env raku
+use v6.d;
+use lib '.';
+use Test;
+use Test::Output;
+use Menu::HashToMenu;
+
+when !%*ENV<AUTHOR_TESTING> { skip 'Skipping author tests'; done-testing; }
+
+plan 2;
+
+my %hash = '01 - option' => 'hello';
+
+my $menu = HashToMenu.new(%hash);
+$menu.menu[0].display;
+output-like { $menu.execute }, /'01 - option' \n .*/, 'does not strip leading number';
+
+my $menu2 = HashToMenu.new(%hash, :strip-leading-number);
+$menu2.menu[0].display;
+output-like { $menu2.execute }, /'option' \n .*/, 'does not strip leading number';
+
+
+
+done-testing;

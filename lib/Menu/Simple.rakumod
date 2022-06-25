@@ -21,6 +21,7 @@ class Option {
 role Option-group {
     my %counters;
     has %.options;
+    has Bool $.strip-leading-number;
 
     method add-options(*@options where { $_.all ~~ Str }) {
         for @options.all -> $display-string {
@@ -45,10 +46,11 @@ role Option-group {
         self.add-option(:$display-string, :$submenu, :&action, :$option-value)
     }
 
-    multi method add-option(Str:D :$display-string, Menu :$submenu, :&action, :$option-value) {
+    multi method add-option(Str:D :$display-string is copy, Menu :$submenu, :&action, :$option-value) {
         my $counter = ++%counters{self.menuID};
         my $parent-menuID = self.menuID;
         my $child-menuID = 0;
+
         if $submenu {
             $child-menuID = $submenu.menuID if $submenu;
         }
@@ -96,7 +98,10 @@ role Option-group {
     method display-group() {
         my $format = self.option-format ~ $.option-separator;
         for self.options.sort {
-            printf $format, .key, .value.display-string;
+            my $display = self.strip-leading-number
+                    ?? .value.display-string.subst(/^^\d+ \s+? \- \s+?/, '')
+                    !! .value.display-string;
+            printf $format, .key, $display;
         }
     }
 
@@ -131,6 +136,10 @@ class Menu does Option-group is export {
 
     method menuID {
         $!menuID;
+    }
+
+    submethod new(Bool :$strip-leading-number = False) {
+        self.bless(:$strip-leading-number);
     }
 
     submethod TWEAK() {
