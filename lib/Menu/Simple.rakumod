@@ -207,11 +207,21 @@ Simple usage:
 =begin code
 use Menu::Simple;
 
+# menu sorted alphabetically
 my $m = Menu.new();         # construct a menu
 $m.add-option: 'Opt A';     # add options to it
 $m.add-option: 'Opt B';
 my $option = $m.execute;    # execute the menu
 say $option.option-number;  # get user's choice
+
+# a menu sorted with option sort numbers
+my $m = Menu.new(:strip-sort-num);  # hides sort numbers
+$m.add-option: '01 - Opt Z';        # displayed first
+$m.add-option: '02 - Opt A';        # displayed second
+
+# Menu options are output as:
+1 - Opt Z     # not "1 - 01 - Opt Z"
+2 = Opt       # not "2 - 02 - Opt A"
 
 =end code
 
@@ -292,6 +302,15 @@ can be executed, or both a submenu and an action can be executed. If neither
 a submenu or action is executed, an option's object is returned back can control
 is given back to to code calling the menu.
 
+Menus are always sorted alphabetically. Add a sort number to the beginning of an
+option's display string to sort in a more arbitrary fashion. The sort numbers
+can be hidden from the menu by using the C<:strip-sort-num> argument when
+constructing the menu.
+
+B<TIP:> When using sort numbers, leave large gaps between the numbers so you can
+easily add new menus between existing menu items. Pad the option sort numbers
+with leading zeroes if you expect to have more than a handful of options.
+
 =head2 Current Features
 
 =item Unlimited number of options can go on a menu
@@ -301,6 +320,9 @@ is given back to to code calling the menu.
 =item Menus are displayed on the command line
 =item User selections are validated
 =item Customizable prompt and option delimiter
+=item Menus are sorted alphabetically
+=item Menus can be shown in a different order by adding leading numbers to options
+=item The leading numbers from options can be optionally stripped
 
 =head1 CLASSES AND METHODS
 
@@ -329,8 +351,7 @@ my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 
 =end code
 
-Accepts a series of strings to add to a menu group.The items will be shown
-in the same order as they are added to the list.
+Accepts a series of strings to add to a menu group.
 
 Returns the menu the option was added to.
 
@@ -356,8 +377,8 @@ $menu.add-option('Run submenu and action', $submenu, { say 'hi' } );
 
 Adds a single option to the menu. It can accept a submenu to display and/or a subroutine
 to execute after the option is selected by the user. Options are displayed in the
-menu in the order they were added to the menu. A value can optionally be associated with
-a value.
+menu alphabetically by default. A value can optionally be associated with
+a option.
 
 Returns the menu the option was added to.
 
@@ -593,6 +614,13 @@ I<This is a lower level method and is not usually not run directly.>
 
 
 =head3 Attributes
+
+=head4 has Bool $.strip-sort-num;
+
+Hides the sort number which can be used for sorting options.
+The menu will Look for digits at the beginning of the option's display
+string followed by a dash character. Whitespace surrounding
+the dash is optional.
 
 =head4 %.options
 
