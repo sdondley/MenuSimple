@@ -21,7 +21,7 @@ class Option {
 role Option-group {
     my %counters;
     has %.options;
-    has Bool $.strip-leading-number;
+    has Bool $.strip-sort-num;
 
     method add-options(*@options where { $_.all ~~ Str }) {
         for @options.all -> $display-string {
@@ -98,7 +98,7 @@ role Option-group {
     method display-group() {
         my $format = self.option-format ~ $.option-separator;
         for self.options.sort {
-            my $display = self.strip-leading-number
+            my $display = self.strip-sort-num
                     ?? .value.display-string.subst(/^^\d+ \s+? \- \s+?/, '')
                     !! .value.display-string;
             printf $format, .key, $display;
@@ -138,8 +138,8 @@ class Menu does Option-group is export {
         $!menuID;
     }
 
-    submethod new(Bool :$strip-leading-number = False) {
-        self.bless(:$strip-leading-number);
+    submethod new(Bool :$strip-sort-num = False) {
+        self.bless(:$strip-sort-num);
     }
 
     submethod TWEAK() {

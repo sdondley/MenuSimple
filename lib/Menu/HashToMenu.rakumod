@@ -7,18 +7,18 @@ class HashToMenu is export {
     has $.menu is rw;
     has &.value-action;
     has &.value-processor;  # does arbitrary stuff to hash values
-    has $.strip-leading-number = False;
+    has $.strip-sort-num = False;
 
-    multi method new(Hash:D $hash, &value-action, Bool $strip-leading-number? = False) {
-        self.bless(:$hash, :&value-action, :$strip-leading-number);
+    multi method new(Hash:D $hash, &value-action, Bool $strip-sort-num? = False) {
+        self.bless(:$hash, :&value-action, :$strip-sort-num);
     }
 
-    multi method new(Hash:D $hash, &value-action, &value-processor, Bool $strip-leading-number? = False) {
-        self.bless(:$hash, :&value-action, :&value-processor, :$strip-leading-number);
+    multi method new(Hash:D $hash, &value-action, &value-processor, Bool $strip-sort-num? = False) {
+        self.bless(:$hash, :&value-action, :&value-processor, :$strip-sort-num);
     }
 
-    multi method new(Hash:D $hash, :&value-action, :&value-processor, :$strip-leading-number = False) {
-        self.bless(:$hash, :&value-action, :&value-processor, :$strip-leading-number);
+    multi method new(Hash:D $hash, :&value-action, :&value-processor, :$strip-sort-num = False) {
+        self.bless(:$hash, :&value-action, :&value-processor, :$strip-sort-num);
     }
 
     method execute() {
@@ -31,11 +31,11 @@ class HashToMenu is export {
     }
 
     multi method recurse(Hash:D $hash, $sm?) {
-        my $menu = $sm || Menu.new(strip-leading-number => $.strip-leading-number);  # initialize main menu
+        my $menu = $sm || Menu.new(strip-sort-num => $.strip-sort-num);  # initialize main menu
         push self.menus, $menu;
         for $hash.sort {
             when .value ~~ Hash {
-                my $submenu = Menu.new(strip-leading-number => $.strip-leading-number);
+                my $submenu = Menu.new(strip-sort-num => $.strip-sort-num);
                 $menu.add-option(.key, :$submenu).add-submenu($submenu);
                 self.recurse(.value, $submenu);
             }
