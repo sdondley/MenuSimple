@@ -12,11 +12,21 @@ Simple usage:
 
     use Menu::Simple;
 
+    # menu sorted alphabetically
     my $m = Menu.new();         # construct a menu
     $m.add-option: 'Opt A';     # add options to it
     $m.add-option: 'Opt B';
     my $option = $m.execute;    # execute the menu
     say $option.option-number;  # get user's choice
+
+    # a menu sorted with option sort numbers
+    my $m = Menu.new(:strip-sort-num);  # hides sort numbers
+    $m.add-option: '01 - Opt Z';        # displayed first
+    $m.add-option: '02 - Opt A';        # displayed second
+
+    # Menu options are output as:
+    1 - Opt Z     # not "1 - 01 - Opt Z"
+    2 = Opt       # not "2 - 02 - Opt A"
 
 More advanced usage:
 
@@ -86,6 +96,10 @@ The `Menu::Simple` module outputs a list of numbered menu options to a terminal.
 
 After a user selects an option, a submenu can be shown or an action can be executed, or both a submenu and an action can be executed. If neither a submenu or action is executed, an option's object is returned back can control is given back to to code calling the menu.
 
+Menus are always sorted alphabetically. Add a sort number to the beginning of an option's display string to sort in a more arbitrary fashion. The sort numbers can be hidden from the menu by using the `:strip-sort-num` argument when constructing the menu.
+
+**TIP:** When using sort numbers, leave large gaps between the numbers so you can easily add new menus between existing menu items. Pad the option sort numbers with leading zeroes if you expect to have more than a handful of options.
+
 Current Features
 ----------------
 
@@ -102,6 +116,12 @@ Current Features
   * User selections are validated
 
   * Customizable prompt and option delimiter
+
+  * Menus are sorted alphabetically
+
+  * Menus can be shown in a different order by adding leading numbers to options
+
+  * The leading numbers from options can be optionally stripped
 
 CLASSES AND METHODS
 ===================
@@ -123,7 +143,7 @@ Creates a new menu object. Returns the menu object created.
 
     my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
 
-Accepts a series of strings to add to a menu group.The items will be shown in the same order as they are added to the list.
+Accepts a series of strings to add to a menu group.
 
 Returns the menu the option was added to.
 
@@ -143,7 +163,7 @@ Returns the menu the option was added to.
     my $submenu = Menu.new.add-option('Option 1');
     $menu.add-option('Run submenu and action', $submenu, { say 'hi' } );
 
-Adds a single option to the menu. It can accept a submenu to display and/or a subroutine to execute after the option is selected by the user. Options are displayed in the menu in the order they were added to the menu. A value can optionally be associated with a value.
+Adds a single option to the menu. It can accept a submenu to display and/or a subroutine to execute after the option is selected by the user. Options are displayed in the menu alphabetically by default. A value can optionally be associated with a option.
 
 Returns the menu the option was added to.
 
@@ -308,6 +328,10 @@ Dumps the hash containing the options counters for all menus
 *This is a lower level method and is not usually not run directly.*
 
 ### Attributes
+
+#### has Bool $.strip-sort-num;
+
+Hides the sort number which can be used for sorting options. The menu will Look for digits at the beginning of the option's display string followed by a dash character. Whitespace surrounding the dash is optional.
 
 #### %.options
 
