@@ -13,11 +13,11 @@ my %hash = '01 - option' => 'hello';
 
 my $menu = HashToMenu.new(%hash);
 $menu.menu[0].display;
-output-like { $menu.execute }, /'01 - option' \n .*/, 'does not strip leading number';
+output-like { $menu.execute }, /'01 - option' \n .*/, 'keeps option sort number';
 
-my $menu2 = HashToMenu.new(%hash, :strip-leading-number);
+my $menu2 = HashToMenu.new(%hash, :strip-sort-number);
 $menu2.menu[0].display;
-output-like { $menu2.execute }, /'option' \n .*/, 'does not strip leading number';
+output-like { $menu2.execute }, /'option' \n .*/, 'strips option sort number';
 
 
 
