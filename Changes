@@ -1,6 +1,8 @@
 Revision history for Menu-Simple
 
 {{$NEXT}}
+    - new feature: prevent sort numbers from getting displayed on menu
+    - improved tests
 
 0.13  2022-06-23T21:06:10-04:00
     - doc fix
