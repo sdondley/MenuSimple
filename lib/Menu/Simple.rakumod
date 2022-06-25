@@ -30,7 +30,7 @@ role Option-group {
         return self;
     }
 
-    multi method add-option(Str $display-string, $option-value? where * !~~ Menu|Callable) {
+    multi method add-option(Str $display-string, $option-value? where * !~~ Menu | Callable) {
         self.add-option(:$display-string, :$option-value)
     }
 
@@ -105,7 +105,7 @@ role Option-group {
         }
     }
 
-    method get-option($option-number where Str:D|Int:D) {
+    method get-option($option-number where Str:D | Int:D) {
         self.options{$option-number};
     }
 
@@ -147,7 +147,7 @@ class Menu does Option-group is export {
         self!counter-init;
     }
 
-    method get-menu(::?CLASS:U $MENU: Int:D $id)  {
+    method get-menu(::?CLASS:U $MENU: Int:D $id) {
         %menus{$id};
     }
 
