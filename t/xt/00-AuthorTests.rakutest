@@ -1,4 +1,3 @@
-#!/usr/bin/env raku
 use v6.d;
 use lib '.';
 use Test;
@@ -12,13 +11,15 @@ is HashToMenu.new(%hash).WHAT, HashToMenu, 'class exists';
 
 when !%*ENV<AUTHOR_TESTING> { skip 'Skipping author tests'; }
 
-my $menu = HashToMenu.new(%hash, sub ($str) { say $str } );
-lives-ok { $menu.execute };
+my $menu = HashToMenu.new(%hash);
+say '';
+lives-ok { $menu.execute }, 'executes menu';
 
 my %hash2 = one => 'two';
 my &action = sub ($str) { say $str };
 my &processor = sub ($str) { flip $str };
 my $menu2 = HashToMenu.new(%hash2, &action, &processor );
+$menu2.menu[0].display;
 output-like { $menu2.execute }, /.*? owt \n .*/, 'perorms action on value of selected menu item';
 
 done-testing;
