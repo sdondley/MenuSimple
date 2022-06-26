@@ -1,27 +1,34 @@
 {
-  "auth": "zef:sdondley",
+  "name": "Menu::Simple",
+  "description": "Create, display, and execute a simple option menu on the command line",
+  "version": "0.13",
+  "perl": "6.*",
   "authors": [
     "Steve Dondley"
   ],
-  "build-depends": [
+  "auth": "zef:sdondley",
+  "depends": [],
+  "build-depends": [],
+  "test-depends": [
+    "Test::Output"
   ],
-  "depends": [
-  ],
-  "description": "Create, display, and execute a simple option menu on the command line",
-  "license": "Artistic-2.0",
-  "name": "Menu::Simple",
-  "perl": "6.*",
   "provides": {
     "Menu::HashToMenu": "lib/Menu/HashToMenu.rakumod",
     "Menu::Simple": "lib/Menu/Simple.rakumod"
   },
   "resources": [
+    "Lists/00 - List Literals",
+    "Lists/14 - Positionality",
+    "Lists/21 - Immutability",
+    "Lists/28 - List Assignment",
+    "Lists/35 - Methods",
+    "Lists/42 - Multidimensional Lists",
+    "Sequences/00 - Basics",
+    "Sequences/07 - Arithmetic and Geometric Sequences",
+    "Sequences/14 - Indexing Sequences",
+    "Sequences/21 - Infinite Sequences"
   ],
-  "source-url": "https://github.com/sdondley/MenuSimple.git",
-  "tags": [
-  ],
-  "test-depends": [
-    "Test::Output"
-  ],
-  "version": "0.14"
+  "license": "Artistic-2.0",
+  "tags": [],
+  "source-url": "https://github.com/sdondley/MenuSimple.git"
 }

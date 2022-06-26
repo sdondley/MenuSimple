@@ -9,11 +9,11 @@ class HashToMenu is export {
     has &.value-processor;  # does arbitrary stuff to hash values
     has $.strip-sort-num = False;
 
-    multi method new(Hash:D $hash, &value-action, Bool $strip-sort-num? = False) {
+    multi method new(Hash:D $hash, &value-action, Bool $strip-sort-num = False) {
         self.bless(:$hash, :&value-action, :$strip-sort-num);
     }
 
-    multi method new(Hash:D $hash, &value-action, &value-processor, Bool $strip-sort-num? = False) {
+    multi method new(Hash:D $hash, &value-action, &value-processor, Bool $strip-sort-num = False) {
         self.bless(:$hash, :&value-action, :&value-processor, :$strip-sort-num);
     }
 
