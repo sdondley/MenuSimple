@@ -10,6 +10,7 @@ class Menu { ... }
 
 class Option {
     has Int $.option-number;
+    has Int $.option-menu-number is rw;
     has Int $.parent-menuID is rw;
     has Int $.child-menuID is rw;
     has Str $.display-string is required;
@@ -97,16 +98,29 @@ role Option-group {
 
     method display-group() {
         my $format = self.option-format ~ $.option-separator;
-        for self.options.sort {
+
+        # handle the parent menu for submenus
+        if self.is-submenu {
+            self.options{0}.option-menu-number = 0;
+            printf $format, 0, self.get-option(0).display-string;
+        }
+        my $menu-counter = 0;
+        for self.options>>.display-string.sort({.value}) -> $p {
+            next if $p.key == 0;
+            self.options{$p.key}.option-menu-number = ++$menu-counter;
             my $display = self.strip-sort-num
-                    ?? .value.display-string.subst(/^^\d+ \s+? \- \s+?/, '')
-                    !! .value.display-string;
-            printf $format, .key, $display;
+                    ?? $p.value.Str.subst(/^^\d+ \s+? \- \s+?/, '')
+                    !! $p.value.Str;
+            printf $format, $menu-counter, $display;
         }
     }
 
     method get-option($option-number where Str:D | Int:D) {
         self.options{$option-number};
+    }
+
+    method get-option-from-menu-number($menu-number where Str:D | Int:D) {
+        self.get-option(self.options>>.option-menu-number{$menu-number});
     }
 
     method option-count() {
@@ -159,7 +173,7 @@ class Menu does Option-group is export {
             self.get-selection if !self.selection;
             self.process-selection;
         } while !self.validated-selection;
-        my $option = self.get-option(self.validated-selection);
+        my $option = self.get-option-from-menu-number(self.validated-selection);
         $option.action()($option.option-value) if $option.action;
         return $option.submenu ?? $option.submenu.execute !! $option;
     }

@@ -1,0 +1,25 @@
+use v6.d;
+use Test;
+use Test::Output;
+use Menu::Simple;
+
+plan 2;
+
+my $m = Menu.new(:strip-sort-num);         # construct a menu
+$m.add-option: '15 - Opt A';     # add options to it
+$m.add-option: '10 - Opt B';     # add options to it
+$m.add-option: '00 - Opt Z';
+
+#output-like { $m.display-group }, /.*2\s\-\sOpt\sB.*/;
+output-from { $m.display-group };
+
+my $option = $m.get-option-from-menu-number(3);
+is $option.display-string, '15 - Opt A', 'get correct menu option';
+
+my $sm = Menu.new.add-option: 'hi';
+$m.add-submenu: $sm;
+my $out = output-from { $sm.display-group };
+like($out, rx:s/0 '-' Parent menu/, 'handles parent menu');
+
+
+done-testing;
