@@ -1,6 +1,8 @@
 Revision history for Menu-Simple
 
 {{$NEXT}}
+
+0.16  2022-06-28T03:41:57-04:00
     - get sorting to work as advertised in docs
 
 0.15  2022-06-27T23:25:40-04:00
