@@ -26,7 +26,7 @@ Simple usage:
 
     # Menu options are output as:
     1 - Opt Z     # not "1 - 01 - Opt Z"
-    2 = Opt       # not "2 - 02 - Opt A"
+    2 - Opt A     # not "2 - 02 - Opt A"
 
 More advanced usage:
 
@@ -75,7 +75,7 @@ Generate a menu from a hash:
         'Option C' =>
             {submenu1 =>
                 { subsubmenu => 1},
-                submenu2 => 'hello' };
+                'Option D' => 'hello' };
 
     my $menu = HashToMenu.new(%hash2);
     $menu.execute
@@ -117,11 +117,11 @@ Current Features
 
   * Customizable prompt and option delimiter
 
-  * Menus are sorted alphabetically
+  * Menus options are sorted alphabetically
 
   * Menus can be shown in a different order by adding leading numbers to options
 
-  * The leading numbers from options can be optionally stripped
+  * A leading number for controlling option sorting can be optionally stripped
 
 CLASSES AND METHODS
 ===================
@@ -169,9 +169,7 @@ Returns the menu the option was added to.
 
 *Use this method to add an option to a menu that executes a submenu and/or calls a subroutine when selected.*
 
-    =head4 execute()
-
-    =begin code
+#### execute()
 
     my $menu = Menu.new().add-options: <'Option 1', 'Option 2', 'Option 3'>;
     $menu.execute;
@@ -180,7 +178,7 @@ Outputs a menu, prompts the user for a selection, validates the selection, and t
 
 This method wraps many of the lower-level methods for processing the user's input.
 
-*This method is the usual for displaying a menu and collecting, validating, and executing responses to a user's selection after a menu is built.*
+*After a menu is built, use This method to display a menu and collect, validate, and execute responses to a user's selection from the menu.*
 
 #### add-submenu(Menu:D $menu)
 
