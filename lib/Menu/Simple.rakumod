@@ -221,7 +221,7 @@ $m.add-option: '02 - Opt A';        # displayed second
 
 # Menu options are output as:
 1 - Opt Z     # not "1 - 01 - Opt Z"
-2 = Opt       # not "2 - 02 - Opt A"
+2 - Opt A     # not "2 - 02 - Opt A"
 
 =end code
 
@@ -275,7 +275,7 @@ my %hash = 'Option A' => 'Value A',
     'Option C' =>
         {submenu1 =>
             { subsubmenu => 1},
-            submenu2 => 'hello' };
+            'Option D' => 'hello' };
 
 my $menu = HashToMenu.new(%hash2);
 $menu.execute
@@ -320,9 +320,9 @@ with leading zeroes if you expect to have more than a handful of options.
 =item Menus are displayed on the command line
 =item User selections are validated
 =item Customizable prompt and option delimiter
-=item Menus are sorted alphabetically
+=item Menus options are sorted alphabetically
 =item Menus can be shown in a different order by adding leading numbers to options
-=item The leading numbers from options can be optionally stripped
+=item A leading number for controlling option sorting can be optionally stripped
 
 =head1 CLASSES AND METHODS
 
@@ -385,8 +385,6 @@ Returns the menu the option was added to.
 I<Use this method to add an option to a menu that executes a submenu and/or calls a subroutine
 when selected.>
 
-=begin code
-
 =head4 execute()
 
 =begin code
@@ -402,8 +400,8 @@ a submenu based on the user's selection.
 
 This method wraps many of the lower-level methods for processing the user's input.
 
-I<This method is the usual for displaying a menu and collecting, validating, and
-executing responses to a user's selection after a menu is built.>
+I<After a menu is built, use This method to display a menu and collect, validate, and
+execute responses to a user's selection from the menu.>
 
 =head4 add-submenu(Menu:D $menu)
 
