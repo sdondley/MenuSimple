@@ -2,6 +2,9 @@ Revision history for Menu-Simple
 
 {{$NEXT}}
 
+0.17  2022-07-01T14:39:31-04:00
+    - distro housekeeping
+
 0.16  2022-06-28T03:41:57-04:00
     - get sorting to work as advertised in docs
 
